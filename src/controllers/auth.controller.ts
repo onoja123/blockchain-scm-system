@@ -40,12 +40,9 @@ export const signup = catchAsync(async (req: Request, res: Response, next: NextF
     const { 
       firstname, 
       lastname,
-      phone, 
-      state,
       gender,
       email, 
       password,
-      referralId
 
     } = req.body;
     
@@ -63,8 +60,6 @@ export const signup = catchAsync(async (req: Request, res: Response, next: NextF
       email, 
       password,
     });
-
-    await AuthService.updateReferrerReferredUsers(referralId, newUser._id as string);
 
     // await sendEmail({
     //   to: newUser.email,

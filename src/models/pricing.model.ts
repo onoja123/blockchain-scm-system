@@ -13,9 +13,10 @@ export const PricingSchema = new mongoose.Schema<IPricing>({
     requiredTimeline: {
 		type: String,
 	},
-    advancedFeatures: {
-		type: [string],
-	},
+    // advancedFeatures: {
+	// 	type: [string],
+    //     required: true
+	// },
     companySize: {
 		type: String,
 	},

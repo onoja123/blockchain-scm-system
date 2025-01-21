@@ -12,10 +12,18 @@ export default class PricingService {
     });
   }
 
-  async getPricing(userId: string) {
-    // Fetch pricing records associated with the user
-    const pricingRecords = await Pricing.find({ _user: userId });
-    return pricingRecords;
+  async getAll(userId: string): Promise<IPricing[]> {
+    const pricing = await Pricing.find({ _user: userId })
+    .populate('_user')
+    return pricing;
+  }
+
+  async getPricingById(
+      id: string
+  ): Promise<IPricing | null> {
+      const priicng = await Pricing.findById(id)
+      .populate('_user')
+      return priicng;
   }
 
   async generatePricing(userId: string, pricingDetails: IPricing) {
@@ -66,7 +74,6 @@ export default class PricingService {
       Project Details:
         - Description: ${pricingDetails.projectDescription}
         - Timeline: ${pricingDetails.requiredTimeline}
-        - Advanced Features: ${pricingDetails.advancedFeatures.join(", ")}
         ${pricingDetails.companySize ? `- Company Size: ${pricingDetails.companySize}` : ""}
         ${pricingDetails.approxNumberOfScreens ? `- Approx. Screens: ${pricingDetails.approxNumberOfScreens}` : ""}
         - Currency: ${pricingDetails.currency}

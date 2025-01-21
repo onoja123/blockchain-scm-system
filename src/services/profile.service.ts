@@ -11,6 +11,16 @@ export default class ProfileService {
     return userProfile;
   }
 
+  static async setProfile(
+    id: string,
+    data: Iuser
+  ): Promise<Iuser | null> {
+    const profile = await User.findByIdAndUpdate(id, data, { new: true }).select(
+      "+email"
+    );
+    return profile;
+  }
+
   static async uploadImage(
     userId: string,
     payload: Iuser

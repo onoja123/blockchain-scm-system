@@ -34,6 +34,41 @@ export const getProfile = catchAsync(async(req: Request, res: Response, next: Ne
   }
 })
 
+/**
+ * @author
+ * @description Update profile
+ * @route `/api/v1/profile/update-profile`
+ * @access Private
+ * @type PATCH
+ **/
+export const setProfile = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  try {
+
+    // const validationResult = ProfileValidator.setProfile(req.body);
+
+    // // if error, send error response
+    // if (validationResult.error) {
+    //     return next(new AppError(validationResult.error.message, ResponseHelper.BAD_REQUEST));
+    // }
+  
+    const profile = await ProfileService.setProfile(req.user?.id, req.body)
+
+    if(!profile){
+      return next(new AppError("User not found", ResponseHelper.RESOURCE_NOT_FOUND))
+    }
+  
+    // send success response
+    ResponseHelper.sendSuccessResponse(res, {
+        message: 'Profile set successfully',
+        statusCode: ResponseHelper.OK,
+        data: profile,
+    });
+
+  } catch (error) {
+    return next(new AppError("An error occurred while trying to set your profile. Please try again.", ResponseHelper.INTERNAL_SERVER_ERROR))
+  }
+})
+
 
 
 /**

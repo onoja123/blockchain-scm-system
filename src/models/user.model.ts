@@ -28,6 +28,26 @@ const userSchema = new Schema<Iuser>({
 		type: String,
 		default: '',
 	},
+	yearsOfExperience: {
+        type: Number,
+        min: 0,
+    },
+    developerTitle: {
+        type: String,
+        trim: true,
+    },
+    developerStack: {
+        type: [String],
+    },
+    certifications: {
+        type: [String],
+    },
+    portfolioLink: {
+        type: String,
+    },
+    cvLink: {
+        type: String,
+    },
 	isActive: {
 		type: Boolean,
 		required: true,

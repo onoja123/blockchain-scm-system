@@ -27,7 +27,6 @@ export interface Iuser extends Document{
     image?: string | ''; 
     passwordConfirm: string;
     yearsOfExperience: number;
-    developerName: string; 
     developerTitle: string; 
     developerStack: string[];
     certifications?: string[]; 
