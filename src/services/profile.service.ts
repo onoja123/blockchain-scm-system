@@ -36,10 +36,6 @@ export default class ProfileService {
   }
 
 
-  static async getUsersByReferralCode(referralCode: string): Promise<Iuser[]> {
-    return User.find({ 'referral.referredBy': referralCode });
-  }
-
   static async updateUserProfile(
     id: string,
     data: Iuser

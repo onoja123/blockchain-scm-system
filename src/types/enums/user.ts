@@ -11,10 +11,6 @@ export enum UserStatus {
     DELETED = 'Deleted',
 }
 
-export enum ReferralStatus{
-    PENDING = "Pending",
-    ACTIVE = "Active"
-}
 export enum IdentityStatus {
     REJECTED = "rejected",
     APPROVED = "approved",

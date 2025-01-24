@@ -156,28 +156,5 @@ export default class AuthService {
       },
     });
   }
-
-  static async generateReferralId(fullname: string): Promise<string> {
-    const firstName = fullname.split(' ')[0];
-    const randomDigits = Math.floor(100 + Math.random() * 900);
-    const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-    return `${firstName}${randomDigits}${randomLetter}`;
-  }
-
-  static async generateReferralIdByEmail(email: string): Promise<string> {
-    const emailPrefix = email.split('@')[0];
-    const randomDigits = Math.floor(100 + Math.random() * 900);
-    const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-    return `${emailPrefix}${randomDigits}${randomLetter}`;
-  }
-
-  static async updateReferrerReferredUsers(referralId: string, newUserId: string): Promise<void> {
-    if (referralId) {
-      await User.updateOne(
-        { 'referral.referralCode': referralId },
-        { $push: { 'referral.referredUsers': newUserId } }
-      );
-    }
-  }
 }
 
