@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import catchAsync from "../utils/catchAsync";
-import AppError from "../utils/appError";
-import ResponseHelper from "../utils/response";
 import PricingService from "../services/pricing.service";
-
+import AppError from "../utils/appError";
+import catchAsync from "../utils/catchAsync";
+import ResponseHelper from "../utils/response";
 const pricingService = new PricingService();
 
 
@@ -38,7 +37,7 @@ export const getPricing = catchAsync(async (req: Request, res: Response, next: N
 
 /**
  * @author Okpe Onoja <okpeonoja18@gmail.com>
- * @description Get one pricing invoice record 
+ * @description Get one pricing invoice record
  * @route `/api/v1/pricing/one-pricing/:pricingId`
  * @access Private
  * @type GET

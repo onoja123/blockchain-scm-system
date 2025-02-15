@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
-import { Currency } from "../enums/admin";
+import { Currency } from "../enums/currency";
 
 export interface IPricing extends Document {
     _user: Schema.Types.ObjectId | string;
@@ -7,8 +7,7 @@ export interface IPricing extends Document {
     requiredTimeline: string;
     // advancedFeatures: string[];
     companySize?: string;
-    approxNumberOfScreens?: number; 
+    approxNumberOfScreens?: number;
     currency: Currency
     estimatedCost: number;
   }
-  
