@@ -6,13 +6,13 @@ const connectToDatabase = async () =>{
     try {
         await mongoose.connect(DB_URL)
         console.log('Connected to MongoDB');
-        
+
     } catch (error) {
-        console.error('Error connecting to MongoDB:', error);  
+        console.error('Error connecting to MongoDB:', error);
 
     if (error instanceof mongoose.Error) {
         console.error('MongoDB Connection Error:', error.message);
-  
+
         setTimeout(() => {
           console.log('Retrying connection...');
           connectToDatabase();
@@ -21,7 +21,7 @@ const connectToDatabase = async () =>{
 
         console.error('Other Error:', error);
 
-      }  
+      }
     }
 }
 

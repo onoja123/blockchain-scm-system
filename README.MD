@@ -1,6 +1,6 @@
 # HOW MUCH?
 
-A platform that helps developers generate pricing proposals for a gig or a project.  
+A platform that helps developers generate pricing proposals for a gig or a project.
 The backend measures and generates the pricing proposal based on the input provided by the user's profile.
 
 ## Features
@@ -26,6 +26,7 @@ The user profile includes:
 
 To generate a pricing proposal, the user must provide the following details about the project and client:
 - **Required Timeline**
+- **Project Title**
 - **Project Description**
 - **Advanced Features in the Application**
 - **Company Size** (optional)

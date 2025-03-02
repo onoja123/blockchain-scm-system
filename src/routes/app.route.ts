@@ -2,7 +2,7 @@ import express from "express";
 import { Routes } from "../types/interfaces/app.inter";
 import AuthRoute from "./auth.route";
 import ProfileRoute from "./profile.route";
-import PricingRoute from "./pricing.route";
+import ProposalRoute from "./proposal.route";
 
 
 const AppRouter = express.Router();
@@ -17,8 +17,8 @@ const appRoutes: Routes = [
         router: ProfileRoute,
     },
     {
-        path: "/pricing",
-        router: PricingRoute,   
+        path: "/proposal",
+        router: ProposalRoute,
     }
 
 ];
