@@ -28,26 +28,6 @@ const userSchema = new Schema<Iuser>({
 		type: String,
 		default: '',
 	},
-	yearsOfExperience: {
-        type: Number,
-        min: 0,
-    },
-    developerTitle: {
-        type: String,
-        trim: true,
-    },
-    developerStack: {
-        type: [String],
-    },
-    certifications: {
-        type: [String],
-    },
-    portfolioLink: {
-        type: String,
-    },
-    cvLink: {
-        type: String,
-    },
 	isActive: {
 		type: Boolean,
 		required: true,
@@ -84,7 +64,7 @@ userSchema.pre('save', async function (next) {
 	if (!this.isModified('password')) {
 	  return next();
 	}
-  
+
 	try {
 	  const hashedPassword = await bcrypt.hash(this.password, 12);
 	  this.password = hashedPassword;
@@ -92,11 +72,11 @@ userSchema.pre('save', async function (next) {
 
 	  return next();
 	}
-  
+
 	next();
 });
 
-  
+
 
 userSchema.methods.generateAuthToken = function () {
     const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET_KEY || '', {
@@ -119,10 +99,10 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp: any) {
       const changedTimestamp = String(
         this.passwordChangedAt.getTime() / 1000
       );
-  
+
       return JWTTimestamp < changedTimestamp;
     }
-  
+
     // False means NOT changed
     return false;
 };

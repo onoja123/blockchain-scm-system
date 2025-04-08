@@ -24,14 +24,10 @@ export interface Iuser extends Document{
     gender: string;
     email: string;
     password: string;
-    image?: string | ''; 
+    image?: string | '';
     passwordConfirm: string;
-    yearsOfExperience: number;
-    developerTitle: string; 
-    developerStack: string[];
-    certifications?: string[]; 
-    portfolioLink?: string;
-    cvLink?: string;
+    role: string[];
+    organization: string;
     isActive: boolean;
     onlineStatus: boolean;
     verificationToken: string;
