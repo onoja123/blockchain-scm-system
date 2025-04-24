@@ -6,10 +6,6 @@ const productSchema = new Schema<Iproduct>({
 		type: Schema.Types.ObjectId,
 		ref: 'User',
 	},
-	_supplier: {
-		type: Schema.Types.ObjectId,
-		ref: 'Supplier',
-	},
 	name: {
 		type: String,
 	},

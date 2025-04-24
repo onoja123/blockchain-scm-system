@@ -24,46 +24,7 @@ export const createProduct = catchAsync(async(req: Request, res: Response, next:
         //     return next(new AppError(validationResult.error.details[0].message, ResponseHelper.BAD_REQUEST));
         // }
 
-        const categoryId = req.params.categoryId;
-
-        if (!categoryId) {
-            return next(new AppError("Category id not found", ResponseHelper.RESOURCE_NOT_FOUND));
-        }
-
-        // Check if the user has a wallet
-        // const userWallet = await Wallet.findOne({ user: req.user?._id });
-        // if (!userWallet) {
-        //     return next(new AppError("User does not have a wallet. Please create a wallet before adding products.", ResponseHelper.BAD_REQUEST));
-        // }
-
-
-        const upload = multer().array('images', 4);
-        upload(req, res, async (err: any) => {
-            if (err) {
-                return next(new AppError('Error uploading image.', ResponseHelper.BAD_REQUEST));
-            }
-
-            if (!req.files || (Array.isArray(req.files) && req.files.length === 0)) {
-                return next(new AppError('No files uploaded.', ResponseHelper.BAD_REQUEST));
-            }
-
-            const imageUrls = [];
-
-            const files = Array.isArray(req.files) ? req.files : Object.values(req.files)[0];
-
-            // Upload images to Cloudinary and collect URLs
-            for (const file of files) {
-
-                const dataUrl = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
-
-                const result = await cloudinary.uploader.upload(dataUrl, {
-                    folder: 'user_images',
-                });
-
-                imageUrls.push(result.secure_url);
-            }
-
-            const newProduct = await ProductService.createProduct(req.user?.id, categoryId, { ...req.body, featuredImage: imageUrls });
+            const newProduct = await ProductService.createProduct(req.user?.id, req.body);
 
             if (!newProduct) {
                 return next(new AppError('Product not found', ResponseHelper.RESOURCE_NOT_FOUND));
@@ -74,7 +35,7 @@ export const createProduct = catchAsync(async(req: Request, res: Response, next:
                 data: newProduct,
                 statusCode: ResponseHelper.RESOURCE_CREATED,
             });
-        });
+
     } catch (error) {
         console.error('Error creating product:', error);
         return next(new AppError('An error occurred while trying to create a product. Please try again.', ResponseHelper.INTERNAL_SERVER_ERROR));

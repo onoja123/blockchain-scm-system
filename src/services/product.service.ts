@@ -39,7 +39,7 @@ export default class ProductService {
         return product;
     }
 
-    static async createProduct(userId: string,  categoryId: string, data: Iproduct): Promise<Iproduct | null> {
+    static async createProduct(userId: string, data: Iproduct): Promise<Iproduct | null> {
         const user = await User.findById(userId);
 
         if (!user) {
@@ -49,13 +49,9 @@ export default class ProductService {
         const newProduct = await Product.create({
           ...data,
           user: userId,
-          category: [categoryId],
         });
 
         await newProduct.save();
-
-        // user.product.push(newProduct._id);
-        // await user.save();
 
         return newProduct;
       }

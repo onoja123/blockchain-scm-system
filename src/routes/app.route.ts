@@ -2,6 +2,8 @@ import express from "express";
 import { Routes } from "../types/interfaces/app.inter";
 import AuthRoute from "./auth.route";
 import ProfileRoute from "./profile.route";
+import ProductRoute from "./product.route";
+import InventoryRoute from "./inventory.route";
 
 
 
@@ -16,6 +18,14 @@ const appRoutes: Routes = [
         path: "/profile",
         router: ProfileRoute,
     },
+    {
+        path: "/product",
+        router: ProductRoute
+    },
+    {
+        path: "/inventory",
+        router: InventoryRoute
+    }
 
 
 ];
