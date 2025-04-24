@@ -26,7 +26,7 @@ export interface Iuser extends Document{
     password: string;
     image?: string | '';
     passwordConfirm: string;
-    role: string[];
+    userType: 'admin' | 'supplier' | 'distributor' | 'consumer';
     organization: string;
     isActive: boolean;
     onlineStatus: boolean;
@@ -36,6 +36,7 @@ export interface Iuser extends Document{
     resetPasswordToken: number;
     resetPasswordExpire: Date;
     verifyEmailToken: string;
+    product: mongoose.Types.ObjectId[];
     correctPassword(candidatePassword: string, userPassword: string): Promise<boolean>;
     generateAuthToken(): string;
     changedPasswordAfter(JWTTimestamp: any): boolean;

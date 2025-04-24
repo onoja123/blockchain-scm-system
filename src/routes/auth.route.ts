@@ -1,5 +1,5 @@
 import express from 'express';
-import { 
+import {
     signup,
     verify,
     login,
@@ -29,7 +29,6 @@ router.post('/resetpassword', resetPassword)
 router.post('/logout', logOut)
 
 
-router.use(MiddlewareService.protect)
 router.use(MiddlewareService.protect)
 router.post('/updatepassword', updatePassword)
 

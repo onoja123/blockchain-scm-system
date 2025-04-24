@@ -1,6 +1,6 @@
 import { Document } from "mongoose";
 
-export interface Iorder extends Document{
+export interface Iinventory extends Document{
 	product: string,
 	quantity: Number,
 	location: String,

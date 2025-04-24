@@ -1,5 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
+import ProductService from '../services/product.service';
+import AppError from '../utils/appError';
+import ResponseHelper from '../utils/response';
+import { cloudinary } from "../config/cloudinary";
+import multer from "multer";
 
 /**
  * @author
@@ -9,6 +14,71 @@ import catchAsync from '../utils/catchAsync';
  * @type POST
  */
 export const createProduct = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+	try {
+
+        // Validate request data using ProductValidator
+        // const validationResult = ProductValidator.createProduct(req.body);
+
+        // if (validationResult.error) {
+        //     // Validation failed
+        //     return next(new AppError(validationResult.error.details[0].message, ResponseHelper.BAD_REQUEST));
+        // }
+
+        const categoryId = req.params.categoryId;
+
+        if (!categoryId) {
+            return next(new AppError("Category id not found", ResponseHelper.RESOURCE_NOT_FOUND));
+        }
+
+        // Check if the user has a wallet
+        // const userWallet = await Wallet.findOne({ user: req.user?._id });
+        // if (!userWallet) {
+        //     return next(new AppError("User does not have a wallet. Please create a wallet before adding products.", ResponseHelper.BAD_REQUEST));
+        // }
+
+
+        const upload = multer().array('images', 4);
+        upload(req, res, async (err: any) => {
+            if (err) {
+                return next(new AppError('Error uploading image.', ResponseHelper.BAD_REQUEST));
+            }
+
+            if (!req.files || (Array.isArray(req.files) && req.files.length === 0)) {
+                return next(new AppError('No files uploaded.', ResponseHelper.BAD_REQUEST));
+            }
+
+            const imageUrls = [];
+
+            const files = Array.isArray(req.files) ? req.files : Object.values(req.files)[0];
+
+            // Upload images to Cloudinary and collect URLs
+            for (const file of files) {
+
+                const dataUrl = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
+
+                const result = await cloudinary.uploader.upload(dataUrl, {
+                    folder: 'user_images',
+                });
+
+                imageUrls.push(result.secure_url);
+            }
+
+            const newProduct = await ProductService.createProduct(req.user?.id, categoryId, { ...req.body, featuredImage: imageUrls });
+
+            if (!newProduct) {
+                return next(new AppError('Product not found', ResponseHelper.RESOURCE_NOT_FOUND));
+            }
+
+            ResponseHelper.sendSuccessResponse(res, {
+                message: 'Product created successfully',
+                data: newProduct,
+                statusCode: ResponseHelper.RESOURCE_CREATED,
+            });
+        });
+    } catch (error) {
+        console.error('Error creating product:', error);
+        return next(new AppError('An error occurred while trying to create a product. Please try again.', ResponseHelper.INTERNAL_SERVER_ERROR));
+    }
 })
 
 /**
@@ -19,6 +89,20 @@ export const createProduct = catchAsync(async(req: Request, res: Response, next:
  * @type POST
  */
 export const getAllProducts = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+	try {
+        const products = await ProductService.getAll();
+
+        if(!products || products.length === 0) {
+            return next(new AppError("Product not found", ResponseHelper.RESOURCE_NOT_FOUND))
+        }
+
+        ResponseHelper.sendSuccessResponse(res, {
+            data: products,
+            statusCode: ResponseHelper.OK,
+        });
+    } catch (error) {
+        return next(new AppError("An error occurred while trying to get all products. Please try again.", ResponseHelper.INTERNAL_SERVER_ERROR))
+    }
 })
 
 /**
@@ -29,6 +113,27 @@ export const getAllProducts = catchAsync(async(req: Request, res: Response, next
  * @type POST
  */
 export const getProductById = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+	try {
+        const { id } = req.params;
+
+		if(!id) {
+			return next(new AppError("Product id not found", ResponseHelper.RESOURCE_NOT_FOUND));
+		}
+
+        const product = await ProductService.getProductById(id);
+
+        if (!product) {
+            return next(new AppError("Product not found", ResponseHelper.RESOURCE_NOT_FOUND));
+        }
+
+        ResponseHelper.sendSuccessResponse(res, {
+            data: product,
+            statusCode: ResponseHelper.OK
+        });
+
+    } catch (error) {
+        return next(new AppError("An error occurred while trying to get your product. Please try again.", ResponseHelper.INTERNAL_SERVER_ERROR))
+    }
 })
 
 /**
@@ -49,6 +154,28 @@ export const getProductsBySupplier = catchAsync(async(req: Request, res: Respons
  * @type POST
  */
 export const updateProduct = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+	try {
+        const { id } = req.params;
+
+		if(!id) {
+			return next(new AppError("Product id not found", ResponseHelper.RESOURCE_NOT_FOUND));
+		}
+
+        const updatedProduct = await ProductService.updateProduct(id, req.body);
+
+        if (!updatedProduct) {
+            return next(new AppError("Product not found", ResponseHelper.RESOURCE_NOT_FOUND));
+        }
+
+        ResponseHelper.sendSuccessResponse(res, {
+            message: "Product updated successfully",
+            data: updatedProduct ,
+            statusCode: ResponseHelper.OK
+        });
+
+    } catch (error) {
+        return next(new AppError("An error occurred while trying to update a product. Please try again.", ResponseHelper.INTERNAL_SERVER_ERROR))
+    }
 })
 
 /**
@@ -59,4 +186,25 @@ export const updateProduct = catchAsync(async(req: Request, res: Response, next:
  * @type POST
  */
 export const deleteProduct = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+	try {
+        const { id } = req.params;
+
+		if(!id) {
+			return next(new AppError("Product id not found", ResponseHelper.RESOURCE_NOT_FOUND));
+		}
+
+        const deletedProduct = await ProductService.deleteProduct(id);
+
+        if (!deletedProduct) {
+            return next(new AppError("Product not found", ResponseHelper.RESOURCE_NOT_FOUND));
+        }
+
+        ResponseHelper.sendSuccessResponse(res, {
+            message: "Product deleted successfully",
+            statusCode: ResponseHelper.OK
+        });
+
+    } catch (error) {
+        return next(new AppError("An error occurred while trying to delete a product. Please try again.", ResponseHelper.INTERNAL_SERVER_ERROR))
+    }
 })

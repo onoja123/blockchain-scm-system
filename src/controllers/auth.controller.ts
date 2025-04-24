@@ -19,45 +19,47 @@ declare global {
 }
 
 
-  
+
 /**
- * @author 
+ * @author
  * @description Signup individual controller
  * @route `/api/v1/auth/signup-individual`
  * @access Public
  * @type POST
  */
 export const signup = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  let newUser: Iuser | null = null; 
-  
+  let newUser: Iuser | null = null;
+
   try {
     const validationResult = AuthValidator.signup(req.body);
-    
+
     if (validationResult.error) {
       return next(new AppError(validationResult.error.message, ResponseHelper.BAD_REQUEST));
     }
-    
-    const { 
-      firstname, 
+
+    const {
+      firstname,
       lastname,
       gender,
-      email, 
+      userType,
+      email,
       password,
 
     } = req.body;
-    
+
     const existingEmail = await AuthService.findUserByEmail(email);
-    
+
     if (existingEmail) {
       return next(new AppError("This email is already taken, please try signing up with a different email.", ResponseHelper.BAD_REQUEST));
     }
 
 
     newUser = await AuthService.createUser({
-      firstname, 
+      firstname,
       lastname,
       gender,
-      email, 
+      userType,
+      email,
       password,
     });
 
@@ -73,10 +75,10 @@ export const signup = catchAsync(async (req: Request, res: Response, next: NextF
 
 
     await AuthService.createSendToken(newUser, 201, res);
-    
+
   } catch (err) {
 
-    
+
     if (newUser) {
       await AuthService.deleteUserById(newUser._id as string);
     }
@@ -87,7 +89,7 @@ export const signup = catchAsync(async (req: Request, res: Response, next: NextF
 
 
 /**
- * @author 
+ * @author
  * @description Verify users email controller
  * @route `/api/v1/auth/verify`
  * @access Public
@@ -100,24 +102,24 @@ export const verify = catchAsync(async(req: Request, res: Response, next: NextFu
     if (validationResult.error) {
       return next(new AppError(validationResult.error.message, ResponseHelper.BAD_REQUEST));
     }
-  
+
     const { otpCode } = req.body;
-  
+
     if (!otpCode) {
       return next(new AppError("Please provide an OTP code", ResponseHelper.UNAUTHORIZED));
     }
-  
+
     const user = await AuthService.findUserfindOTP(otpCode)
-  
-  
+
+
     if (!user) {
       return next(new AppError("This otp code has expired or is invalid, please check and try again.", ResponseHelper.BAD_REQUEST))
     }
-  
+
     if (user.otp.expiresAt && user.otp.expiresAt < new Date()) {
       return next(new AppError("This otp code has expired", ResponseHelper.BAD_REQUEST));
     }
-  
+
     if (user.isActive === true) {
       user.otp.code = null;
       return next(new AppError("Your account has already been verified.", ResponseHelper.BAD_REQUEST))
@@ -135,19 +137,19 @@ export const verify = catchAsync(async(req: Request, res: Response, next: NextFu
     //     firstname: user.firstname ,
     //   },
     // });
-  
+
     ResponseHelper.sendSuccessResponse(res, {
-        statusCode: ResponseHelper.OK, 
+        statusCode: ResponseHelper.OK,
         message: 'Otp verified successfully 🚀!',
     });
-    
+
   } catch (error) {
     return next(new AppError("An error occurred while verify the otp", ResponseHelper.INTERNAL_SERVER_ERROR))
   }
 })
 
 /**
- * @author 
+ * @author
  * @description Login user controller
  * @route `/api/v1/auth/login`
  * @access Public
@@ -175,7 +177,7 @@ export const login = catchAsync(async(req: Request, res: Response, next: NextFun
   }
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError("Incorrect email or password.", ResponseHelper.UNAUTHORIZED))    
+    return next(new AppError("Incorrect email or password.", ResponseHelper.UNAUTHORIZED))
   }
 
 
@@ -185,7 +187,7 @@ export const login = catchAsync(async(req: Request, res: Response, next: NextFun
 
 
 /**
- * @author 
+ * @author
  * @description Resend verification otp to users email Controller
  * @route `/api/v1/auth/resendverification`
  * @access Public
@@ -198,11 +200,11 @@ export const resendVerification = catchAsync(async(req: Request, res: Response, 
     if (!user) {
       return next(new AppError("User does not exist", ResponseHelper.RESOURCE_NOT_FOUND))
     }
-  
+
     if (user.isActive === true) {
       return next(new AppError("Account has already been verified", ResponseHelper.BAD_REQUEST));
     }
-  
+
     const otp = await AuthService.generateOTP()
 
     user.otp = {
@@ -212,7 +214,7 @@ export const resendVerification = catchAsync(async(req: Request, res: Response, 
 
   await user.save({ validateBeforeSave: false });
 
-  
+
     try {
 
       // await sendEmail({
@@ -225,20 +227,20 @@ export const resendVerification = catchAsync(async(req: Request, res: Response, 
       // });
 
       ResponseHelper.sendSuccessResponse(res, {
-        statusCode: ResponseHelper.OK, 
+        statusCode: ResponseHelper.OK,
         message: 'Verification code sent successfully🚀!',
     });
 
     } catch (err) {
         user.otp.code = null;
       await user.save({ validateBeforeSave: false });
-  
+
       return next(new AppError("Couldn't send the verification email", ResponseHelper.INTERNAL_SERVER_ERROR));
     }
 })
 
 /**
- * @author 
+ * @author
  * @description Forogot password controller
  * @route `/api/v1/auth/forgotPassword`
  * @access Public
@@ -257,7 +259,7 @@ export const forgotPassword = catchAsync(async(req:Request, res:Response, next: 
   if (!user) {
     return next(new AppError("There is no user with this email address.", ResponseHelper.RESOURCE_NOT_FOUND))
   }
-  
+
 
     const otp = await AuthService.generateOTP()
 
@@ -282,7 +284,7 @@ export const forgotPassword = catchAsync(async(req:Request, res:Response, next: 
     // });
 
     ResponseHelper.sendSuccessResponse(res, {
-      statusCode: ResponseHelper.OK, 
+      statusCode: ResponseHelper.OK,
       message: 'Email sent sucessfully 🚀!',
   });
   } catch (err) {
@@ -294,7 +296,7 @@ export const forgotPassword = catchAsync(async(req:Request, res:Response, next: 
 })
 
 /**
- * @author 
+ * @author
  * @description Reset Password Controller
  * @route `/api/v1/auth/resetpassword`
  * @access Public
@@ -326,7 +328,7 @@ export const resetPassword = catchAsync(async (req: Request, res: Response, next
         }
 
         await AuthService.updatePassword(req.user?.id, req.body.password, req.body.confirmPassword);
-        
+
         ResponseHelper.sendSuccessResponse(res, {
             statusCode: ResponseHelper.OK,
             message: 'Password updated successfully!',
@@ -365,27 +367,27 @@ export const updatePassword = catchAsync(async (req: Request, res: Response, nex
     if (!user) {
       return next(new AppError("User not found", ResponseHelper.RESOURCE_NOT_FOUND));
     }
-  
+
     if (!(await user.correctPassword(currentPassword, user.password))) {
       return next(
         new AppError(
-          'Current password is incorrect', 
+          'Current password is incorrect',
           401
         )
       );
     }
-  
+
     if (newPassword !== confirmPassword) {
       return next(
         new AppError(
-          "New password and confirm password don't match", 
+          "New password and confirm password don't match",
           400
         )
       );
     }
-  
+
     await AuthService.updatePassword(req.user?.id, newPassword, confirmPassword);
-  
+
     ResponseHelper.sendSuccessResponse(res, {
       statusCode: ResponseHelper.OK ,
       message: 'Password updated successfully!',

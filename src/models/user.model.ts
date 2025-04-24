@@ -39,6 +39,17 @@ const userSchema = new Schema<Iuser>({
 	verificationTokenExpires: {
 			type: Date
 	},
+	product: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: "Product",
+		},
+	],
+	userType: {
+		type: String,
+		enum: ['admin', 'supplier', 'distributor', 'consumer'],
+		required: true,
+	  },
     otp: {
         code: {
             type: Number
