@@ -4,6 +4,8 @@ import AuthRoute from "./auth.route";
 import ProfileRoute from "./profile.route";
 import ProductRoute from "./product.route";
 import InventoryRoute from "./inventory.route";
+import BlochainRoute from "./blockchain.route";
+import OrderRoute from "./order.route";
 
 
 
@@ -25,9 +27,15 @@ const appRoutes: Routes = [
     {
         path: "/inventory",
         router: InventoryRoute
+    },
+    {
+        path: "/order",
+        router: OrderRoute
+    },
+    {
+        path: "/blockchain",
+        router: BlochainRoute
     }
-
-
 ];
 
 appRoutes.forEach((route) => {
