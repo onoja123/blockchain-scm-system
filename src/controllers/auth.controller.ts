@@ -31,11 +31,11 @@ export const signup = catchAsync(async (req: Request, res: Response, next: NextF
   let newUser: Iuser | null = null;
 
   try {
-    const validationResult = AuthValidator.signup(req.body);
+    // const validationResult = AuthValidator.signup(req.body);
 
-    if (validationResult.error) {
-      return next(new AppError(validationResult.error.message, ResponseHelper.BAD_REQUEST));
-    }
+    // if (validationResult.error) {
+    //   return next(new AppError(validationResult.error.message, ResponseHelper.BAD_REQUEST));
+    // }
 
     const {
       firstname,

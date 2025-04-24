@@ -1,19 +1,20 @@
 import Joi from "joi";
 
 export default class AuthValidator {
-    
+
     static signup(data: any): Joi.ValidationResult {
         const schema = Joi.object().keys({
-            firstname: Joi.string().required(), 
-            lastname: Joi.string().required(), 
-            gender: Joi.string().required(), 
+            firstname: Joi.string().required(),
+            lastname: Joi.string().required(),
+            gender: Joi.string().required(),
+            userType: Joi.string().valid('Individual', 'Enterprise').required(),
             email: Joi.string().email().required(),
-            password: Joi.string().required(), 
+            password: Joi.string().required(),
 
         });
         return schema.validate(data);
     }
-    
+
     static verify(data: any): Joi.ValidationResult {
         const schema = Joi.object().keys({
             otpCode: Joi.string().required(),
