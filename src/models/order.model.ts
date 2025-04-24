@@ -6,20 +6,37 @@ const orderSchema = new Schema<Iorder>({
 		type: Schema.Types.ObjectId,
 		ref: 'User',
 	},
-	product: {
-		type: String,
-	},
+	products: [
+		{
+		  productId: {
+			type: Schema.Types.ObjectId,
+			ref: "Product",
+			required: true
+		  },
+		  quantity: {
+			type: Number,
+			required: true
+		  },
+		  unitPrice: {
+			type: Number,
+			required: true
+		  }
+		}
+	],
 	quantity: {
 		type: String,
 	},
 	status: {
 		type: String,
 	},
-	supplier: {
+	paymentMethod: {
 		supplier: String
 	},
 	deliveryDate: {
 		type: Date,
+	},
+	note: {
+		type: String,
 	},
 	createdAt: {
 		type: Date,

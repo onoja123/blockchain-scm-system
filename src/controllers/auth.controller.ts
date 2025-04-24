@@ -341,7 +341,7 @@ export const resetPassword = catchAsync(async (req: Request, res: Response, next
 
 
 /**
- * @author Okpe Onoja <okpeonoja18@gmail.com>
+ * @author
  * @description Update Password Controller
  * @route `/api/auth/updatepassword`
  * @access Public

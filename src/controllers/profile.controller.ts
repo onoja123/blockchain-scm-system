@@ -9,7 +9,7 @@ import multer from "multer";
 
 
 /**
- * @author Okpe Onoja <okpeonoja18@gmail.com>
+ * @author
  * @description Get profile
  * @route `/api/v1/profile/get-profile`
  * @access Private
@@ -23,9 +23,9 @@ export const getProfile = catchAsync(async(req: Request, res: Response, next: Ne
           return next(new AppError("No profile found", ResponseHelper.RESOURCE_NOT_FOUND))
       }
 
-      ResponseHelper.sendSuccessResponse(res, { 
+      ResponseHelper.sendSuccessResponse(res, {
           statusCode: ResponseHelper.OK,
-          data: profile ,  
+          data: profile ,
       });
 
   } catch (error) {
@@ -50,13 +50,13 @@ export const setProfile = catchAsync(async (req: Request, res: Response, next: N
     // if (validationResult.error) {
     //     return next(new AppError(validationResult.error.message, ResponseHelper.BAD_REQUEST));
     // }
-  
+
     const profile = await ProfileService.setProfile(req.user?.id, req.body)
 
     if(!profile){
       return next(new AppError("User not found", ResponseHelper.RESOURCE_NOT_FOUND))
     }
-  
+
     // send success response
     ResponseHelper.sendSuccessResponse(res, {
         message: 'Profile set successfully',
@@ -87,13 +87,13 @@ export const updateProfile = catchAsync(async (req: Request, res: Response, next
     if (validationResult.error) {
         return next(new AppError(validationResult.error.message, ResponseHelper.BAD_REQUEST));
     }
-  
+
     const profile = await ProfileService.updateUserProfile(req.user?.id, req.body)
 
     if(!profile){
       return next(new AppError("User not found", ResponseHelper.RESOURCE_NOT_FOUND))
     }
-  
+
     // send success response
     ResponseHelper.sendSuccessResponse(res, {
         message: 'Updated profile successfully',
@@ -163,7 +163,7 @@ export const deleteMember = catchAsync(async (req: Request, res: Response, next:
   try {
 
     const profile = await ProfileService.deleteMember(req.user?.id)
- 
+
     if(!profile){
       return next(new AppError("User not found", ResponseHelper.RESOURCE_NOT_FOUND))
     }
@@ -171,7 +171,7 @@ export const deleteMember = catchAsync(async (req: Request, res: Response, next:
     // send response
      ResponseHelper.sendResponse(res, {
       message: "Profile deleted successfully",
-      statusCode: ResponseHelper.OK 
+      statusCode: ResponseHelper.OK
       });
 
   } catch (error) {
