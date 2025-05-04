@@ -3,6 +3,13 @@ import Order from "../models/order.model";
 import User from "../models/user.model";
 export default class OrderService {
 
+  static async getAll(): Promise<Iorder[]> {
+    const order =  await Order.find()
+    .populate("_orderedBy");
+    
+    return order
+  }
+
   static async getAllOrders(userId: string): Promise<Iorder[]> {
     return Order.find({ _orderedBy: userId }).populate("_orderedBy");
   }

@@ -14,7 +14,6 @@ export default class ProductService {
     static async getAllByUser(userId: string): Promise<Iproduct[]> {
         const products = await Product.find({ user: userId })
         .populate('category');
-
         return products;
     }
 

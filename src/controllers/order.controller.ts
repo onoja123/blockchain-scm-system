@@ -33,10 +33,34 @@ export const createOrder = catchAsync(async(req: Request, res: Response, next: N
 
 /**
  * @author
+ * @description get all orders(Admin)
+ * @route `/api/v1/order/`
+ * @access Public
+ * @type GET
+ */
+export const getAll = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+	try {
+        const orders = await OrderService.getAll();
+
+        if(!orders || orders.length === 0) {
+            return next(new AppError("Order not found", ResponseHelper.RESOURCE_NOT_FOUND))
+        }
+
+        ResponseHelper.sendSuccessResponse(res, {
+            data: orders,
+            statusCode: ResponseHelper.OK,
+        });
+    } catch (error) {
+        return next(new AppError("An error occurred while trying to create an orders. Please try again.", ResponseHelper.INTERNAL_SERVER_ERROR))
+    }
+})
+
+/**
+ * @author
  * @description get all orders
  * @route `/api/v1/order/`
  * @access Public
- * @type POST
+ * @type GET
  */
 export const getAllOrders = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -60,7 +84,7 @@ export const getAllOrders = catchAsync(async(req: Request, res: Response, next: 
  * @description get an order by id
  * @route `/api/v1/order/`
  * @access Public
- * @type POST
+ * @type GET
  */
 export const getOrderById = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -85,7 +109,7 @@ export const getOrderById = catchAsync(async(req: Request, res: Response, next: 
  * @description Update order status
  * @route `/api/v1/order/`
  * @access Public
- * @type POST
+ * @type PATCH
  */
 export const updateOrderStatus = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -110,7 +134,7 @@ export const updateOrderStatus = catchAsync(async(req: Request, res: Response, n
  * @description Delete an order
  * @route `/api/v1/order/`
  * @access Public
- * @type POST
+ * @type DELETE
  */
 export const deleteOrder = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
 	try {

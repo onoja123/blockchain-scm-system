@@ -73,6 +73,32 @@ export const getAllProducts = catchAsync(async(req: Request, res: Response, next
  * @access Public
  * @type POST
  */
+export const getAllByUser = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+	try {
+
+        const product = await ProductService.getAllByUser(req.user?.id);
+
+        if (!product) {
+            return next(new AppError("Product not found", ResponseHelper.RESOURCE_NOT_FOUND));
+        }
+
+        ResponseHelper.sendSuccessResponse(res, {
+            data: product,
+            statusCode: ResponseHelper.OK
+        });
+
+    } catch (error) {
+        return next(new AppError("An error occurred while trying to get your product. Please try again.", ResponseHelper.INTERNAL_SERVER_ERROR))
+    }
+})
+
+/**
+ * @author
+ * @description get a Product
+ * @route `/api/v1/product/`
+ * @access Public
+ * @type POST
+ */
 export const getProductById = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
 	try {
         const { id } = req.params;

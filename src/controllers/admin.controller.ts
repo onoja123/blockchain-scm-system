@@ -39,7 +39,7 @@ export const createUser = catchAsync(async(req: Request, res: Response, next: Ne
  * @description get all users
  * @route `/api/v1/user/`
  * @access Public
- * @type POST
+ * @type GET
  */
 export const getAll = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     try {
@@ -63,7 +63,7 @@ export const getAll = catchAsync(async(req: Request, res: Response, next: NextFu
  * @description get a user by id
  * @route `/api/v1/user/`
  * @access Public
- * @type POST
+ * @type GET
  */
 export const getOne = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     try {
@@ -95,7 +95,7 @@ export const getOne = catchAsync(async(req: Request, res: Response, next: NextFu
  * @description Update a User
  * @route `/api/v1/user/`
  * @access Public
- * @type POST
+ * @type PATCH
  */
 export const updateUser = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     try {
@@ -128,7 +128,7 @@ export const updateUser = catchAsync(async(req: Request, res: Response, next: Ne
  * @description Delete a user(admin)
  * @route `/api/v1/user/`
  * @access Public
- * @type POST
+ * @type DELETE
  */
 export const deleteUser = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
     try {

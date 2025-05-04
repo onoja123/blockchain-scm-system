@@ -5,7 +5,14 @@ import { Iinventory } from "../types/interfaces/inventory.inter";
 
 export default class InventoryService {
 
-    static async getAll(userId: string): Promise<Iinventory[]> {
+    static async getAll(): Promise<Iinventory[]> {
+        const inventory = await Inventory.find()
+        .populate('_user')
+		.populate('_product')
+        return inventory;
+    }
+
+    static async getAllByUser(userId: string): Promise<Iinventory[]> {
         const inventory = await Inventory.find({ _user: userId })
         .populate('_user')
 		.populate('_product')

@@ -3,6 +3,7 @@ import {
 	createProduct,
 	deleteProduct,
 	getAllProducts,
+	getAllByUser,
 	getProductById,
 	updateProduct
 } from "../controllers/product.controller";
@@ -13,7 +14,9 @@ const ProductRouter = express.Router()
 
 ProductRouter.use(MiddlewareService.protect)
 
-ProductRouter.get('/all-Products', getAllProducts)
+ProductRouter.get('/admin/all-Products', getAllProducts)
+
+ProductRouter.get('/all-Products', getAllByUser)
 
 ProductRouter.get('/one-Product/:id', getProductById);
 
