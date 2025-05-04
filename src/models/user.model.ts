@@ -45,6 +45,18 @@ const userSchema = new Schema<Iuser>({
 			ref: "Product",
 		},
 	],
+	order: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: "Order",
+		},
+	],
+	inventory: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: "Inventory",
+		},
+	],
 	userType: {
 		type: String,
 		enum: ['admin', 'supplier', 'distributor', 'consumer'],

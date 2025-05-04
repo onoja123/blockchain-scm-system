@@ -3,6 +3,7 @@ import catchAsync from '../utils/catchAsync';
 import OrderService from '../services/order.service';
 import AppError from '../utils/appError';
 import ResponseHelper from '../utils/response';
+import logger from '../utils/logger';
 
 /**
  * @author
@@ -25,6 +26,7 @@ export const createOrder = catchAsync(async(req: Request, res: Response, next: N
             statusCode: ResponseHelper.OK,
         });
     } catch (error) {
+        logger.info("Error occurred", error)
         return next(new AppError("An error occurred while trying to get all orders. Please try again.", ResponseHelper.INTERNAL_SERVER_ERROR))
     }
 })

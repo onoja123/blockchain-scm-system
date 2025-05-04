@@ -37,6 +37,8 @@ export interface Iuser extends Document{
     resetPasswordExpire: Date;
     verifyEmailToken: string;
     product: mongoose.Types.ObjectId[];
+    order: mongoose.Types.ObjectId[];
+    inventory: mongoose.Types.ObjectId[];
     correctPassword(candidatePassword: string, userPassword: string): Promise<boolean>;
     generateAuthToken(): string;
     changedPasswordAfter(JWTTimestamp: any): boolean;
