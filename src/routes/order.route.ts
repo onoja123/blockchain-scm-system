@@ -2,6 +2,7 @@ import express from "express";
 import {
 	createOrder,
 	getAllOrders,
+	getAll,
 	getOrderById,
 	updateOrderStatus,
 	deleteOrder
@@ -12,6 +13,8 @@ import MiddlewareService from "../middlewares/auth.middleware";
 const OrderRouter = express.Router()
 
 OrderRouter.use(MiddlewareService.protect)
+
+OrderRouter.get('/admin/all-orders', getAll)
 
 OrderRouter.get('/all-orders', getAllOrders)
 

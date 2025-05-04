@@ -43,14 +43,38 @@ export const addInventoryItem = catchAsync(async(req: Request, res: Response, ne
 
 /**
  * @author
+ * @description get all inventories(Admin)
+ * @route `/api/v1/inventory/`
+ * @access Public
+ * @type GET
+ */
+export const getAll = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
+	try {
+        const inventories = await InventoryService.getAll();
+
+        if(!inventories || inventories.length === 0) {
+            return next(new AppError("Inventory not found", ResponseHelper.RESOURCE_NOT_FOUND))
+        }
+
+        ResponseHelper.sendSuccessResponse(res, {
+            data: inventories,
+            statusCode: ResponseHelper.OK,
+        });
+    } catch (error) {
+        return next(new AppError("An error occurred while trying to get all inventories. Please try again.", ResponseHelper.INTERNAL_SERVER_ERROR))
+    }
+})
+
+/**
+ * @author
  * @description get all inventories
  * @route `/api/v1/inventory/`
  * @access Public
- * @type POST
+ * @type GET
  */
 export const getAllInventory = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
 	try {
-        const inventories = await InventoryService.getAll(req.user?.id);
+        const inventories = await InventoryService.getAllByUser(req.user?.id);
 
         if(!inventories || inventories.length === 0) {
             return next(new AppError("Inventory not found", ResponseHelper.RESOURCE_NOT_FOUND))
@@ -70,7 +94,7 @@ export const getAllInventory = catchAsync(async(req: Request, res: Response, nex
  * @description get an inventory by id
  * @route `/api/v1/inventory/`
  * @access Public
- * @type POST
+ * @type GET
  */
 export const getInventoryById = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -98,20 +122,10 @@ export const getInventoryById = catchAsync(async(req: Request, res: Response, ne
 
 /**
  * @author
- * @description Get an inventory by  product id
- * @route `/api/v1/inventory/`
- * @access Public
- * @type POST
- */
-export const getInventoryByProduct = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
-})
-
-/**
- * @author
  * @description Update an Inventory
  * @route `/api/v1/inventory/`
  * @access Public
- * @type POST
+ * @type PATCH
  */
 export const updateInventory = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -143,7 +157,7 @@ export const updateInventory = catchAsync(async(req: Request, res: Response, nex
  * @description Delete an Inventory(admin)
  * @route `/api/v1/inventory/`
  * @access Public
- * @type POST
+ * @type DELETE
  */
 export const deleteInventory = catchAsync(async(req: Request, res: Response, next: NextFunction) => {
 	try {

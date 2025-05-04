@@ -4,7 +4,8 @@ import {
 	getAllInventory,
 	getInventoryById,
 	updateInventory,
-	deleteInventory
+	deleteInventory,
+	getAll
 } from "../controllers/inventory.controller";
 import MiddlewareService from "../middlewares/auth.middleware";
 
@@ -12,6 +13,8 @@ import MiddlewareService from "../middlewares/auth.middleware";
 const InventoryRoute = express.Router()
 
 InventoryRoute.use(MiddlewareService.protect)
+
+InventoryRoute.get('/admin/all-inventories', getAll)
 
 InventoryRoute.get('/all-inventories', getAllInventory)
 
