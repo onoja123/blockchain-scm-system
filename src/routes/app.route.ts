@@ -1,5 +1,6 @@
 import express from "express";
 import { Routes } from "../types/interfaces/app.inter";
+import AdminRoute from "./admin.route";
 import AuthRoute from "./auth.route";
 import ProfileRoute from "./profile.route";
 import ProductRoute from "./product.route";
@@ -12,6 +13,10 @@ import OrderRoute from "./order.route";
 const AppRouter = express.Router();
 
 const appRoutes: Routes = [
+    {
+        path: "/admin",
+        router: AdminRoute,
+    },
     {
         path: "/auth",
         router: AuthRoute,

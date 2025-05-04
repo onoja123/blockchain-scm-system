@@ -53,6 +53,10 @@ export default class ProductService {
 
         await newProduct.save();
 
+        user.product.push(newProduct.id)
+
+        await user.save()
+
         return newProduct;
       }
 

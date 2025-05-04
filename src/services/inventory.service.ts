@@ -33,6 +33,9 @@ export default class InventoryService {
 
         await newInventory.save();
 
+        user.inventory.push(newInventory.id)
+
+         await user.save()
         return newInventory;
       }
 

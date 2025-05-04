@@ -1,5 +1,6 @@
 import { Iorder } from "../types/interfaces/order.inter";
 import Order from "../models/order.model";
+import User from "../models/user.model";
 export default class OrderService {
 
   static async getAllOrders(userId: string): Promise<Iorder[]> {
@@ -7,12 +8,18 @@ export default class OrderService {
   }
 
   static async createOrder(userId: string, data: Iorder): Promise<Iorder | null> {
+    const user = await User.findById(userId);
+    
     const newOrder = await Order.create({
       ...data,
       _orderedBy: userId,
     });
 
     await newOrder.save();
+
+    user.order.push(newOrder.id)
+
+    await user.save()
     return newOrder;
   }
 
