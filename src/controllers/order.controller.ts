@@ -56,6 +56,100 @@ export const getAll = catchAsync(async(req: Request, res: Response, next: NextFu
 })
 
 /**
+ * @description Get directions between two locations
+ * @route `/api/v1/order/distance`
+ * @access Public
+ * @type POST
+ */
+export const calculateOrderDistance = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { origin, destination } = req.body;
+
+        if (!origin || !destination) {
+            return next(new AppError("Origin and destination are required", ResponseHelper.BAD_REQUEST));
+        }
+
+        const distance = await OrderService.calculateOrderDistance(origin, destination);
+
+        if (distance === null) {
+            return next(new AppError("Unable to calculate distance", ResponseHelper.INTERNAL_SERVER_ERROR));
+        }
+
+        ResponseHelper.sendSuccessResponse(res, {
+            message: "Distance calculated successfully",
+            data: { distance },
+            statusCode: ResponseHelper.OK,
+        });
+    } catch (error) {
+        logger.error("Error calculating distance:", error);
+        return next(new AppError("An error occurred while calculating distance. Please try again.", ResponseHelper.INTERNAL_SERVER_ERROR));
+    }
+});
+
+/**
+ * @description Get directions between two locations
+ * @route `/api/v1/order/directions`
+ * @access Public
+ * @type POST
+ */
+export const getOrderDirections = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { origin, destination } = req.body;
+
+        if (!origin || !destination) {
+            return next(new AppError("Origin and destination are required", ResponseHelper.BAD_REQUEST));
+        }
+
+        const directions = await OrderService.getOrderDirections(origin, destination);
+
+        if (!directions) {
+            return next(new AppError("Unable to fetch directions", ResponseHelper.INTERNAL_SERVER_ERROR));
+        }
+
+        ResponseHelper.sendSuccessResponse(res, {
+            message: "Directions fetched successfully",
+            data: directions,
+            statusCode: ResponseHelper.OK,
+        });
+    } catch (error) {
+        logger.error("Error fetching directions:", error);
+        return next(new AppError("An error occurred while fetching directions. Please try again.", ResponseHelper.INTERNAL_SERVER_ERROR));
+    }
+});
+
+/**
+ * @description Get nearby places around a location
+ * @route `/api/v1/order/nearby-places`
+ * @access Public
+ * @type POST
+ */
+export const getNearbyPlaces = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { location, radius, type } = req.body;
+
+        if (!location || !radius || !type) {
+            return next(new AppError("Location, radius, and type are required", ResponseHelper.BAD_REQUEST));
+        }
+
+        const nearbyPlaces = await OrderService.getNearbyPlaces(location, radius, type);
+
+        if (!nearbyPlaces) {
+            return next(new AppError("Unable to fetch nearby places", ResponseHelper.INTERNAL_SERVER_ERROR));
+        }
+
+        ResponseHelper.sendSuccessResponse(res, {
+            message: "Nearby places fetched successfully",
+            data: nearbyPlaces,
+            statusCode: ResponseHelper.OK,
+        });
+    } catch (error) {
+        logger.error("Error fetching nearby places:", error);
+        return next(new AppError("An error occurred while fetching nearby places. Please try again.", ResponseHelper.INTERNAL_SERVER_ERROR));
+    }
+});
+
+
+/**
  * @author
  * @description get all orders
  * @route `/api/v1/order/`

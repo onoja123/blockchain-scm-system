@@ -23,6 +23,16 @@ const orderSchema = new Schema<Iorder>({
 		  }
 		}
 	],
+	currentLocation:{
+		latitude: {
+			type: Number,
+			required: true
+		},
+		longitude: {
+			type: Number,
+			required: true
+		}
+	},
 	quantity: {
 		type: String,
 	},
