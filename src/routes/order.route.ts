@@ -3,6 +3,9 @@ import {
 	createOrder,
 	getAllOrders,
 	getAll,
+	calculateOrderDistance,
+	getOrderDirections,
+	getNearbyPlaces,
 	getOrderById,
 	updateOrderStatus,
 	deleteOrder
@@ -17,6 +20,12 @@ OrderRouter.use(MiddlewareService.protect)
 OrderRouter.get('/admin/all-orders', getAll)
 
 OrderRouter.get('/all-orders', getAllOrders)
+
+OrderRouter.post('/distance', calculateOrderDistance)
+
+OrderRouter.post('/directions', getOrderDirections)
+
+OrderRouter.get('/nearby-places', getNearbyPlaces)
 
 OrderRouter.get('/one-order/:id', getOrderById);
 

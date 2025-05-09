@@ -1,6 +1,7 @@
 import { Iorder } from "../types/interfaces/order.inter";
 import Order from "../models/order.model";
 import User from "../models/user.model";
+import GoogleMapsService from "./goggle.service";
 export default class OrderService {
 
   static async getAll(): Promise<Iorder[]> {
@@ -41,4 +42,25 @@ export default class OrderService {
     return Order.findByIdAndDelete(id);
   }
 
+    static async calculateOrderDistance(
+    origin: string,
+    destination: string
+  ): Promise<number | null> {
+    return GoogleMapsService.getDistance(origin, destination);
+  }
+
+  static async getOrderDirections(
+    origin: string,
+    destination: string
+  ): Promise<any | null> {
+    return GoogleMapsService.getDirections(origin, destination);
+  }
+
+  static async getNearbyPlaces(
+    location: string,
+    radius: number,
+    type: string
+  ): Promise<any | null> {
+    return GoogleMapsService.getNearbyPlaces(location, radius, type);
+  }
 }
