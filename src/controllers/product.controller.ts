@@ -54,7 +54,10 @@ export const getAllProducts = catchAsync(async(req: Request, res: Response, next
         const products = await ProductService.getAll();
 
         if(!products || products.length === 0) {
-            return next(new AppError("Product not found", ResponseHelper.RESOURCE_NOT_FOUND))
+            return ResponseHelper.sendSuccessResponse(res, {
+                data: [],
+                statusCode: ResponseHelper.OK,
+            });
         }
 
         ResponseHelper.sendSuccessResponse(res, {
@@ -79,7 +82,10 @@ export const getAllByUser = catchAsync(async(req: Request, res: Response, next: 
         const product = await ProductService.getAllByUser(req.user?.id);
 
         if (!product) {
-            return next(new AppError("Product not found", ResponseHelper.RESOURCE_NOT_FOUND));
+            return ResponseHelper.sendSuccessResponse(res, {
+                data: [],
+                statusCode: ResponseHelper.OK,
+            });
         }
 
         ResponseHelper.sendSuccessResponse(res, {
@@ -110,7 +116,10 @@ export const getProductById = catchAsync(async(req: Request, res: Response, next
         const product = await ProductService.getProductById(id);
 
         if (!product) {
-            return next(new AppError("Product not found", ResponseHelper.RESOURCE_NOT_FOUND));
+            return ResponseHelper.sendSuccessResponse(res, {
+                data: [],
+                statusCode: ResponseHelper.OK,
+            });
         }
 
         ResponseHelper.sendSuccessResponse(res, {

@@ -26,7 +26,10 @@ export const addInventoryItem = catchAsync(async(req: Request, res: Response, ne
             const newInventory = await InventoryService.addInventoryItem(req.user?.id, req.body);
 
             if (!newInventory) {
-                return next(new AppError('Inventory not found', ResponseHelper.RESOURCE_NOT_FOUND));
+                return ResponseHelper.sendSuccessResponse(res, {
+                    data: [],
+                    statusCode: ResponseHelper.OK,
+                });
             }
 
             ResponseHelper.sendSuccessResponse(res, {
@@ -53,7 +56,10 @@ export const getAll = catchAsync(async(req: Request, res: Response, next: NextFu
         const inventories = await InventoryService.getAll();
 
         if(!inventories || inventories.length === 0) {
-            return next(new AppError("Inventory not found", ResponseHelper.RESOURCE_NOT_FOUND))
+            return ResponseHelper.sendSuccessResponse(res, {
+                data: [],
+                statusCode: ResponseHelper.OK,
+            });
         }
 
         ResponseHelper.sendSuccessResponse(res, {
@@ -77,7 +83,10 @@ export const getAllInventory = catchAsync(async(req: Request, res: Response, nex
         const inventories = await InventoryService.getAllByUser(req.user?.id);
 
         if(!inventories || inventories.length === 0) {
-            return next(new AppError("Inventory not found", ResponseHelper.RESOURCE_NOT_FOUND))
+            return ResponseHelper.sendSuccessResponse(res, {
+                data: [],
+                statusCode: ResponseHelper.OK,
+            });
         }
 
         ResponseHelper.sendSuccessResponse(res, {
@@ -101,13 +110,19 @@ export const getInventoryById = catchAsync(async(req: Request, res: Response, ne
         const { id } = req.params;
 
 		if(!id) {
-			return next(new AppError("Inventory id not found", ResponseHelper.RESOURCE_NOT_FOUND));
+            return ResponseHelper.sendSuccessResponse(res, {
+                data: [],
+                statusCode: ResponseHelper.OK,
+            });
 		}
 
 		const inventory = await InventoryService.getInventoryById(id);
 
         if (!inventory) {
-            return next(new AppError("Inventory not found", ResponseHelper.RESOURCE_NOT_FOUND));
+            return ResponseHelper.sendSuccessResponse(res, {
+                data: [],
+                statusCode: ResponseHelper.OK,
+            });
         }
 
         ResponseHelper.sendSuccessResponse(res, {

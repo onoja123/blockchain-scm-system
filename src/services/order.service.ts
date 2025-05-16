@@ -1,7 +1,7 @@
 import { Iorder } from "../types/interfaces/order.inter";
 import Order from "../models/order.model";
 import User from "../models/user.model";
-import GoogleMapsService from "./goggle.service";
+import GoogleMapsService from "./google.service";
 export default class OrderService {
 
   static async getAll(): Promise<Iorder[]> {

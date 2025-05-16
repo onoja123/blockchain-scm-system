@@ -46,7 +46,10 @@ export const getAll = catchAsync(async(req: Request, res: Response, next: NextFu
         const users = await AdminService.getAll();
 
         if(!users || users.length === 0) {
-            return next(new AppError("User not found", ResponseHelper.RESOURCE_NOT_FOUND))
+            return ResponseHelper.sendSuccessResponse(res, {
+                data: [],
+                statusCode: ResponseHelper.OK,
+            });
         }
 
         ResponseHelper.sendSuccessResponse(res, {

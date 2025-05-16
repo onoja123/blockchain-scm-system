@@ -43,7 +43,10 @@ export const getAll = catchAsync(async(req: Request, res: Response, next: NextFu
         const orders = await OrderService.getAll();
 
         if(!orders || orders.length === 0) {
-            return next(new AppError("Order not found", ResponseHelper.RESOURCE_NOT_FOUND))
+            return ResponseHelper.sendSuccessResponse(res, {
+                data: [],
+                statusCode: ResponseHelper.OK,
+            });
         }
 
         ResponseHelper.sendSuccessResponse(res, {
@@ -161,7 +164,10 @@ export const getAllOrders = catchAsync(async(req: Request, res: Response, next: 
         const orders = await OrderService.getAllOrders(req.user?.id);
 
         if(!orders || orders.length === 0) {
-            return next(new AppError("Order not found", ResponseHelper.RESOURCE_NOT_FOUND))
+            return ResponseHelper.sendSuccessResponse(res, {
+                data: [],
+                statusCode: ResponseHelper.OK,
+            });
         }
 
         ResponseHelper.sendSuccessResponse(res, {
@@ -185,7 +191,10 @@ export const getOrderById = catchAsync(async(req: Request, res: Response, next: 
         const orders = await OrderService.getOrderById(req.params.id);
 
         if(!orders) {
-            return next(new AppError("Order not found", ResponseHelper.RESOURCE_NOT_FOUND))
+            return ResponseHelper.sendSuccessResponse(res, {
+                data: [],
+                statusCode: ResponseHelper.OK,
+            });
         }
 
         ResponseHelper.sendSuccessResponse(res, {
