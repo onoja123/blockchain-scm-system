@@ -10,6 +10,7 @@ dotenv.config();
 
 const compileTemplate = (templateName: string, placeholders?: Record<string, string>): string => {
   const filePath = path.join(__dirname, '../templates', `${templateName}.html`);
+  console.log(`[sendEmail] Compiling template: ${filePath}`);
   const templateContent = fs.readFileSync(filePath, 'utf-8');
   const template = Handlebars.compile(templateContent);
   let html = template(placeholders);
@@ -25,6 +26,8 @@ const sendEmail = async (options: EmailOptions): Promise<void> => {
     const pass = process.env.SMTP_PASS || '';
     const host = process.env.SMTP_HOST || '';
     const port = parseInt(process.env.SMTP_PORT || '587');
+
+    console.log(`[sendEmail] Creating transporter with host: ${host}, port: ${port}, user: ${user}`);
 
     const transporter = nodemailer.createTransport({
       host: host,
@@ -45,9 +48,13 @@ const sendEmail = async (options: EmailOptions): Promise<void> => {
       html: html,
     };
 
+    console.log(`[sendEmail] Sending email to: ${options.to}, subject: ${options.subject}`);
+
     const info = await transporter.sendMail(mailOptions);
+
+    console.log(`[sendEmail] Email sent: ${info.messageId}`);
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('[sendEmail] Error sending email:', error);
   }
 };
 

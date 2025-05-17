@@ -25,7 +25,7 @@ OrderRouter.post('/distance', calculateOrderDistance)
 
 OrderRouter.post('/directions', getOrderDirections)
 
-OrderRouter.get('/nearby-places', getNearbyPlaces)
+OrderRouter.post('/nearby-places', getNearbyPlaces)
 
 OrderRouter.get('/one-order/:id', getOrderById);
 

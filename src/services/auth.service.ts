@@ -83,7 +83,7 @@ export default class AuthService {
       }
     });
 
-    // await this.sendWelcomeEmail(newUser, otp);
+    await this.sendWelcomeEmail(newUser, otp);
     return newUser;
   }
 
